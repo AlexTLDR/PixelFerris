@@ -66,6 +66,13 @@ fn main() {
 
             crop(infile, outfile);
         }
+        "generate" => {
+            if args.len() != 1 {
+                print_usage_and_exit();
+            }
+            let outfile = args.remove(0);
+            generate(outfile);
+        }
         _ => {
             print_usage_and_exit();
         }
@@ -150,4 +157,21 @@ fn crop(infile: String, outfile: String) {
     let mut img = image::open(infile).expect("Failed to open INFILE");
     let img2 = img.crop(400, 400, 400, 400);
     img2.save(outfile).expect("Failed to save OUTFILE");
+}
+
+fn generate(outfile: String) {
+    let width = 800;
+    let height = 800;
+
+    let mut imgbuf = image::ImageBuffer::new(width, height);
+
+    for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
+        let r = (x as f32 / width as f32 * 255.0) as u8;
+        let g = (y as f32 / height as f32 * 255.0) as u8;
+        let b = 128;
+
+        *pixel = image::Rgb([r, g, b]);
+    }
+
+    imgbuf.save(outfile).unwrap();
 }
