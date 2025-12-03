@@ -21,6 +21,15 @@ fn main() {
             let outfile = args.remove(0);
             fractal(outfile);
         }
+        "brighten" => {
+            if args.len() != 2 {
+                print_usage_and_exit();
+            }
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+
+            brighten(infile, outfile);
+        }
         _ => {
             print_usage_and_exit();
         }
@@ -75,4 +84,10 @@ fn fractal(outfile: String) {
     }
 
     imgbuf.save(outfile).unwrap();
+}
+
+fn brighten(infile: String, outfile: String) {
+    let img = image::open(infile).expect("Failed to open INFILE");
+    let img2 = img.brighten(30);
+    img2.save(outfile).expect("Failed to save OUTFILE");
 }
