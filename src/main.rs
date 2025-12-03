@@ -39,6 +39,15 @@ fn main() {
 
             rotate(infile, outfile);
         }
+        "invert" => {
+            if args.len() != 2 {
+                print_usage_and_exit();
+            }
+            let infile = args.remove(0);
+            let outfile = args.remove(0);
+
+            invert(infile, outfile);
+        }
         _ => {
             print_usage_and_exit();
         }
@@ -105,4 +114,10 @@ fn rotate(infile: String, outfile: String) {
     let img = image::open(infile).expect("Failed to open INFILE");
     let img2 = img.rotate90();
     img2.save(outfile).expect("Failed to save OUTFILE");
+}
+
+fn invert(infile: String, outfile: String) {
+    let mut img = image::open(infile).expect("Failed to open INFILE");
+    img.invert();
+    img.save(outfile).expect("Failed to save OUTFILE");
 }
